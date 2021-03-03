@@ -19,8 +19,8 @@ class Operation
     private $person_type;
     private $amount;
     private $currency;
-    const CASH_OUT = 'cash_out';
-    const CASH_IN = 'cash_in';
+    const CASH_OUT = 'withdraw';
+    const CASH_IN = 'deposit';
 
     public function setId(int $id)
     {

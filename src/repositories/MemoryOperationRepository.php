@@ -30,9 +30,8 @@ class MemoryOperationRepository implements OperationRepository
     public function getPersonCashOutOperationsFromSameWeek(int $person_id, $date): array
     {
         $operations = [];
-        $current_date = new \DateTime($date);
+        $current_date = new \DateTime(($date));
         $current_week = $current_date->format('W');
-
         foreach ($this->operations as $operation) {
             $operation_date = new \DateTime($operation->getDate());
             $operation_week = $operation_date->format('W');

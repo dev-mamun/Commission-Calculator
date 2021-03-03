@@ -45,11 +45,7 @@ class Calculator
     {
         $results = [];
         foreach ($this->repository->getAll() as $operation) {
-            try {
-                $calculator = $this->getStrategy($operation);
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }
+            $calculator = $this->getStrategy($operation);
             $results[] = $this->format($calculator->calculate());
         }
         return $results;

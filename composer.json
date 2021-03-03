@@ -6,16 +6,16 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Paysera\\CommissionTask\\": "src"
+      "Paysera\\CommissionTask\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Paysera\\CommissionTask\\Tests\\": "tests"
+      "Paysera\\CommissionTask\\Tests\\": "tests/"
     }
   },
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.1",
     "ext-bcmath": "*"
   },
   "require-dev": {

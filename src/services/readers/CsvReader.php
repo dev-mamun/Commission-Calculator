@@ -30,9 +30,7 @@ class CsvReader implements Reader
             while (($data = fgetcsv($handle, 1000, $this->delimeter)) !== false) {
                 $num = count($data);
                 $row++;
-                for ($c = 0; $c < $num; $c++) {
-                    $results[] = explode($this->delimeter, $data[$c]);
-                }
+                $results[] = $data;
             }
             fclose($handle);
         }

@@ -17,6 +17,7 @@ use Paysera\CommissionTask\services\CurrencyConverter;
 class CashOut extends Commission
 {
     const COMMISSION_PERCENT = 0.3;
+    const BUSINESS_COMMISSION = 0.5;
     const COMMISSION_MIN_LEGAL = 0.50;
     const TIMES_PER_WEEK = 3;
     const AMOUNT_PER_WEEK = 1000;
@@ -32,26 +33,22 @@ class CashOut extends Commission
     public function calculate(): float
     {
         $person_type = $this->operation->getPersonType();
-
-        if ($person_type == 'natural') {
-            $commission = $this->calculateForNaturalPerson();
-        } else if ($person_type == 'legal') {
-            $commission = $this->calculateForLegalPerson();
+        $commission = "";
+        if ($person_type == 'private') {
+            $commission = $this->calculateForPrivate();
+        } else if ($person_type == 'business') {
+            $commission = $this->calculateForBusiness();
         }
-
-        return (float)$commission;
+        return (float) $commission;
     }
 
-    protected function calculateForNaturalPerson(): float
+    protected function calculateForPrivate(): float
     {
         $id = $this->operation->getId();
         $person_id = $this->operation->getPersonId();
         $current_date = $this->operation->getDate();
-
         $current_amount = CurrencyConverter::convertToEur($this->operation->getAmount(), $this->operation->getCurrency());
-
         $person_operations = $this->repository->getPersonCashOutOperationsFromSameWeek($person_id, $current_date);
-
         $times_per_week = 0;
         $amount_per_week = 0;
         $discount_id = null;
@@ -61,35 +58,28 @@ class CashOut extends Commission
             if ($times_per_week <= self::TIMES_PER_WEEK) {
                 $amount_per_week += CurrencyConverter::convertToEur($operation->getAmount(), $operation->getCurrency());
             }
-
             if ($amount_per_week >= self::AMOUNT_PER_WEEK) {
                 $discount_id = $operation->getId();
                 break;
             }
         }
-
         if (!empty($discount_id)) {
-
             if ($id == $discount_id) {
                 $current_amount = $amount_per_week - self::AMOUNT_PER_WEEK;
             } else if ($id < $discount_id) {
                 $current_amount = 0;
             }
-
         } else {
             $current_amount = 0;
         }
-
         $commission = $current_amount * self::COMMISSION_PERCENT / 100;
-
         $converted = CurrencyConverter::convertEur($commission, $this->operation->getCurrency());
-
         return $converted;
     }
 
-    protected function calculateForLegalPerson(): float
+    protected function calculateForBusiness(): float
     {
-        $commission = $this->operation->getAmount() * self::COMMISSION_PERCENT / 100;
+        $commission = $this->operation->getAmount() * self::BUSINESS_COMMISSION / 100;
 
         if ($commission < self::COMMISSION_MIN_LEGAL) {
             return self::COMMISSION_MIN_LEGAL;
