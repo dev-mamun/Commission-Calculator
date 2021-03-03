@@ -1,0 +1,39 @@
+{
+  "name": "paysera/commission-task",
+  "description": "Skeleton for Paysera recruitment task",
+  "keywords": [],
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Paysera\\CommissionTask\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Paysera\\CommissionTask\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "ext-bcmath": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.5",
+    "friendsofphp/php-cs-fixer": "2.16"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "bin-dir": "bin"
+  },
+  "scripts": {
+    "phpunit": "phpunit",
+    "fix-cs": "php-cs-fixer fix",
+    "test-cs": "php-cs-fixer fix --dry-run -v",
+    "test": [
+      "@phpunit",
+      "@test-cs"
+    ]
+  }
+}
